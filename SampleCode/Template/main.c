@@ -404,33 +404,6 @@ void UART2_PDMA_TIMEOUT_Init(void)
 
     // PDMA->TOUTPSC = (PDMA->TOUTPSC & (~PDMA_TOUTPSC_TOUTPSC1_Msk)) | (0x5 << PDMA_TOUTPSC_TOUTPSC1_Pos);
     PDMA_SetTimeOut(PDMA,UART2_RX_DMA_CH, ENABLE, PDMA_TIME );     
-    
-     /*
-        UART data freq : 1.6KHz	0.625	ms
-
-        Set PDMA CH 0/1 timeout to about 
-        2 ms (5/(72M/(2^15)))
-        0.56 ms (5/(72M/(2^13)))
-
-        target (ms)	    u32TimeOutCnt	clk div	    prescale	
-        2.275555556	    5	            72000000	32768	15      111
-        1.137777778	    5	            72000000	16384	14      110
-        0.568888889	    5	            72000000	8192	13      101
-        0.284444444	    5	            72000000	4096	12      100
-        0.142222222	    5	            72000000	2048	11      011
-        0.071111111	    5	            72000000	1024	10      010
-        0.035555556	    5	            72000000	512	    9       001
-        0.017777778	    5	            72000000	256	    8       000  
-
-    */
-
-    //
-    // Note:
-    //  If you will call xxxFromISR API from ISR, the peripheral's interrupt priority
-    //  must bigger than 'configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY', or the API will
-    //  block by the FreeRTOS kernel.
-    //
-    // NVIC_SetPriority(PDMA_IRQn, 0x06);
     NVIC_EnableIRQ(PDMA_IRQn);
 }
 
